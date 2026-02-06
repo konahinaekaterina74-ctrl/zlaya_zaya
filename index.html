@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система "Сервисные работы"</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-tools"></i> Система "Сервисные работы"</h1>
+            <div class="user-info">
+                <div class="role-selector">
+                    <span>Роль:</span>
+                    <select id="roleSelect">
+                        <option value="store">Управляющий магазином</option>
+                        <option value="office">Управляющий офисом</option>
+                        <option value="hr">Специалист HR</option>
+                    </select>
+                </div>
+                <div class="user-display" id="userDisplay">
+                    <i class="fas fa-user"></i> Самохвалова В.Д. (Магазин №15)
+                </div>
+            </div>
+        </header>
+
+        <main>
+            
+            <div id="storeManagerView" class="role-view active">
+                <div class="dashboard">
+                    <h2><i class="fas fa-store"></i> Панель управления магазином</h2>
+                    
+                   
+                    <section class="card">
+                        <h3><i class="fas fa-plus-circle"></i> Создать новое задание (История 1)</h3>
+                        <form id="createTaskForm">
+                            <div class="form-group">
+                                <label for="taskName">Наименование работ *</label>
+                                <input type="text" id="taskName" placeholder="Например: Инвентаризация склада" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="taskType">Тип работ</label>
+                                <select id="taskType">
+                                    <option value="inventory">Инвентаризация</option>
+                                    <option value="cleaning">Клининг</option>
+                                    <option value="repair">Ремонт</option>
+                                    <option value="other">Другие работы</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="startDate">Дата начала *</label>
+                                    <input type="date" id="startDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="endDate">Дата окончания *</label>
+                                    <input type="date" id="endDate" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="specialization">Специализация/должность исполнителя *</label>
+                                <input type="text" id="specialization" placeholder="Например: Кладовщик" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Описание работ</label>
+                                <textarea id="description" rows="3" placeholder="Дополнительные детали..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Сохранить задание
+                            </button>
+                        </form>
+                    </section>
+
+                    
+                    <section class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-tasks"></i> Мои задания (История 2, 9, 12)</h3>
+                            <div class="filter-options">
+                                <select id="taskFilter">
+                                    <option value="all">Все задания</option>
+                                    <option value="new">Новые</option>
+                                    <option value="in-progress">В работе</option>
+                                    <option value="completed">Выполнены</option>
+                                    <option value="closed">Закрыты</option>
+                                    <option value="cancelled">Отменены</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table id="storeTasksTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Наименование</th>
+                                        <th>Даты выполнения</th>
+                                        <th>Специализация</th>
+                                        <th>Статус</th>
+                                        <th>Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="empty-state" id="emptyTasks">
+                            <i class="fas fa-clipboard-list"></i>
+                            <p>У вас пока нет созданных заданий</p>
+                        </div>
+                    </section>
+
+                   
+                    <section class="card">
+                        <h3><i class="fas fa-history"></i> История заданий (История 12)</h3>
+                        <div class="history-list" id="taskHistory">
+                           
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            
+            <div id="officeManagerView" class="role-view">
+                <div class="dashboard">
+                    <h2><i class="fas fa-building"></i> Панель управления офисом</h2>
+                    
+                    
+                    <section class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-list-check"></i> Задания в работе (История 3)</h3>
+                            <div class="filter-options">
+                                <input type="text" id="storeFilter" placeholder="Фильтр по магазину">
+                                <input type="date" id="dateFilter">
+                                <button class="btn btn-secondary" id="applyFilters">Применить</button>
+                                <button class="btn btn-outline" id="clearFilters">Сбросить</button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table id="officeTasksTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Магазин</th>
+                                        <th>Наименование</th>
+                                        <th>Даты выполнения</th>
+                                        <th>Специализация</th>
+                                        <th>Статус</th>
+                                        <th>Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    
+                    <section class="card" id="specialistSection" style="display: none;">
+                        <div class="card-header">
+                            <h3><i class="fas fa-users"></i> Подбор специалистов (История 4)</h3>
+                            <div class="task-info" id="currentTaskInfo">
+                                
+                            </div>
+                        </div>
+                        
+                        <div class="search-specialists">
+                            <div class="form-group">
+                                <label>Поиск по специализации:</label>
+                                <div class="search-box">
+                                    <input type="text" id="specialistSearch" placeholder="Введите специализацию...">
+                                    <button class="btn btn-primary" id="searchSpecialists">
+                                        <i class="fas fa-search"></i> Найти
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="specialists-list" id="specialistsList">
+                           
+                        </div>
+                        
+                        <div class="no-specialists" id="noSpecialists" style="display: none;">
+                            <i class="fas fa-user-slash"></i>
+                            <h4>Подходящих специалистов не найдено</h4>
+                            <p>Вы можете создать заявку на подбор для HR-специалиста</p>
+                            <button class="btn btn-secondary" id="createRecruitmentRequest">
+                                <i class="fas fa-user-plus"></i> Создать заявку на подбор (История 6)
+                            </button>
+                        </div>
+                    </section>
+
+                   
+                    <section class="card" id="assignmentSection" style="display: none;">
+                        <h3><i class="fas fa-user-check"></i> Назначение специалистов (История 5)</h3>
+                        <div class="selected-specialists" id="selectedSpecialists">
+                           
+                        </div>
+                        <div class="assignment-actions">
+                            <button class="btn btn-primary" id="assignSpecialists">
+                                <i class="fas fa-check-circle"></i> Назначить специалистов
+                            </button>
+                            <button class="btn btn-outline" id="cancelAssignment">
+                                Отменить
+                            </button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+           
+            <div id="hrView" class="role-view">
+                <div class="dashboard">
+                    <h2><i class="fas fa-user-tie"></i> Панель HR-специалиста</h2>
+                    
+                    
+                    <section class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-clipboard"></i> Заявки на подбор (История 7)</h3>
+                            <div class="notification-badge" id="notificationBadge">0</div>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table id="recruitmentTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Магазин</th>
+                                        <th>Специализация</th>
+                                        <th>Срок выполнения</th>
+                                        <th>Статус</th>
+                                        <th>Дата создания</th>
+                                        <th>Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    
+                    <section class="card" id="addSpecialistSection" style="display: none;">
+                        <h3><i class="fas fa-user-plus"></i> Добавить нового специалиста (История 8)</h3>
+                        <form id="addSpecialistForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="specialistName">ФИО *</label>
+                                    <input type="text" id="specialistName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="specialistPosition">Специализация/должность *</label>
+                                    <input type="text" id="specialistPosition" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="specialistPhone">Контактный телефон *</label>
+                                    <input type="tel" id="specialistPhone" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="specialistEmail">Email</label>
+                                    <input type="email" id="specialistEmail">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="specialistStatus">Статус занятости</label>
+                                <select id="specialistStatus">
+                                    <option value="available">Доступен</option>
+                                    <option value="busy">Занят</option>
+                                    <option value="vacation">В отпуске</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="specialistExperience">Опыт работы</label>
+                                <textarea id="specialistExperience" rows="2" placeholder="Опыт и квалификация"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="relatedRequest">Связанная заявка</label>
+                                <input type="text" id="relatedRequest" readonly>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Добавить специалиста
+                                </button>
+                                <button type="button" class="btn btn-outline" id="cancelAddSpecialist">
+                                    Отменить
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+
+                    
+                    <section class="card">
+                        <h3><i class="fas fa-bell"></i> Уведомления (История 11)</h3>
+                        <div class="notifications-list" id="notificationsList">
+                            
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+
+       
+        <div id="modalOverlay" class="modal-overlay" style="display: none;">
+            
+            <div class="modal" id="sendTaskModal">
+                <div class="modal-header">
+                    <h3><i class="fas fa-paper-plane"></i> Отправить задание в офис</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Вы уверены, что хотите отправить задание <strong id="taskToSendName"></strong> в центральный офис?</p>
+                    <p>После отправки статус задания изменится на "В работе", и вы не сможете его редактировать.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="confirmSendTask">Отправить</button>
+                    <button class="btn btn-outline modal-close">Отмена</button>
+                </div>
+            </div>
+
+           
+            <div class="modal" id="cancelTaskModal">
+                <div class="modal-header">
+                    <h3><i class="fas fa-times-circle"></i> Отменить задание</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Вы уверены, что хотите отменить задание <strong id="taskToCancelName"></strong>?</p>
+                    <div class="form-group">
+                        <label for="cancelReason">Причина отмены (необязательно)</label>
+                        <textarea id="cancelReason" rows="3" placeholder="Укажите причину отмены задания"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" id="confirmCancelTask">Отменить задание</button>
+                    <button class="btn btn-outline modal-close">Вернуться</button>
+                </div>
+            </div>
+
+            
+            <div class="modal" id="closeTaskModal">
+                <div class="modal-header">
+                    <h3><i class="fas fa-archive"></i> Закрыть задание (История 10)</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Закрытие задания <strong id="taskToCloseName"></strong></p>
+                    <div class="form-group">
+                        <label for="actualCompletionDate">Фактическая дата выполнения *</label>
+                        <input type="date" id="actualCompletionDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmationDoc">Подтверждающий документ (необязательно)</label>
+                        <input type="file" id="confirmationDoc">
+                    </div>
+                    <div class="form-group">
+                        <label for="closureNotes">Примечания</label>
+                        <textarea id="closureNotes" rows="2" placeholder="Дополнительные комментарии"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="confirmCloseTask">Закрыть задание</button>
+                    <button class="btn btn-outline modal-close">Отмена</button>
+                </div>
+            </div>
+
+            
+            <div class="modal" id="recruitmentModal">
+                <div class="modal-header">
+                    <h3><i class="fas fa-user-plus"></i> Создание заявки на подбор</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Создание заявки на подбор специалиста для задания <strong id="taskForRecruitment"></strong></p>
+                    <div class="form-group">
+                        <label for="recruitmentSpecialization">Требуемая специализация *</label>
+                        <input type="text" id="recruitmentSpecialization" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recruitmentDeadline">Срок подбора *</label>
+                        <input type="date" id="recruitmentDeadline" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recruitmentRequirements">Требования к кандидату</label>
+                        <textarea id="recruitmentRequirements" rows="4" placeholder="Опыт, квалификация, особые требования..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="confirmRecruitmentRequest">Создать заявку</button>
+                    <button class="btn btn-outline modal-close">Отмена</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Система "Сервисные работы" &copy; 2023 | Команда: Самохвалова, Григорьева ИСП-214</p>
+            <p class="project-info">Проект включает 12 User Stories: MVP (8), Релиз 2 (4)</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
